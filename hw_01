@@ -1,0 +1,29 @@
+import pandas as pd
+import numpy as np
+
+iris = pd.read_csv('data/iris.data', header=None)
+print(iris.head(3))
+
+
+# make summary statistics for each column
+def column_summary_statistics(column):
+    if np.issubdtype(column.dtype, np.number):  # need to have check for string, otherwise quartile breaks
+        mean = np.mean(column)
+        min = np.min(column)
+        max = np.max(column)
+        quartiles = np.percentile(column, [25, 50, 75])
+
+        return pd.Series({
+            'mean': mean, 'minimum': min, 'maximum': max, '25%': quartiles[0],
+            '50%': quartiles[1], '75%': quartiles[2]})
+    else:
+        return pd.Series({
+            'mean': np.nan, 'minimum': np.nan, 'maximum': np.nan, '25%': np.nan, '50%': np.nan, '75%': np.nan})
+
+
+# apply column_summary_statistcs to entire dataframe
+def summary_statistics(df):
+    return df.apply(column_summary_statistics)
+
+
+print(summary_statistics(iris))
