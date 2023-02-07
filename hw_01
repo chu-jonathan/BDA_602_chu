@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import plotly.express as px
 
 iris = pd.read_csv('data/iris.data', header=None)
 print(iris.head(3))
@@ -27,3 +28,7 @@ def summary_statistics(df):
 
 
 print(summary_statistics(iris))
+
+fig1 = px.scatter(iris, x='sepal_length', y='sepal_width',
+                    title='Width vs Length')
+fig1.show()
