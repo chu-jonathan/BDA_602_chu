@@ -6,13 +6,15 @@
 #
 joblib==1.2.0
     # via scikit-learn
-numpy==1.24.1
+numpy==1.24.2
     # via
     #   -r requirements.in
     #   pandas
     #   scikit-learn
     #   scipy
 pandas==1.5.3
+    # via -r requirements.in
+plotly==5.13.0
     # via -r requirements.in
 python-dateutil==2.8.2
     # via pandas
@@ -24,5 +26,7 @@ scipy==1.10.0
     # via scikit-learn
 six==1.16.0
     # via python-dateutil
+tenacity==8.1.0
+    # via plotly
 threadpoolctl==3.1.0
     # via scikit-learn
