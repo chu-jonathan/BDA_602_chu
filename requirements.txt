@@ -14,6 +14,8 @@ numpy==1.24.2
     #   scipy
 pandas==1.5.3
     # via -r requirements.in
+plotly==5.13.0
+    # via -r requirements.in
 py4j==0.10.9
     # via pyspark
 pyspark==3.0.3
@@ -21,8 +23,6 @@ pyspark==3.0.3
     #   -r requirements.in
     #   pyspark-stubs
 pyspark-stubs==3.0.0.post3
-    # via -r requirements.in
-plotly==5.13.0
     # via -r requirements.in
 python-dateutil==2.8.2
     # via pandas
@@ -38,4 +38,3 @@ tenacity==8.1.0
     # via plotly
 threadpoolctl==3.1.0
     # via scikit-learn
-
