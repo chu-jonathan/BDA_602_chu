@@ -4,4 +4,4 @@ pyspark-stubs
 pandas
 plotly
 scikit-learn
-
+statsmodels
