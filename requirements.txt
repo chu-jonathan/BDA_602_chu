@@ -4,8 +4,12 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
+greenlet==2.0.2
+    # via sqlalchemy
 joblib==1.2.0
     # via scikit-learn
+mysql-connector-python==8.0.33
+    # via -r requirements.in
 numpy==1.24.2
     # via
     #   -r requirements.in
@@ -24,6 +28,8 @@ patsy==0.5.3
     # via statsmodels
 plotly==5.13.0
     # via -r requirements.in
+protobuf==3.20.3
+    # via mysql-connector-python
 py4j==0.10.9
     # via pyspark
 pyspark==3.0.3
@@ -47,6 +53,8 @@ six==1.16.0
     # via
     #   patsy
     #   python-dateutil
+sqlalchemy==1.4.47
+    # via -r requirements.in
 statsmodels==0.13.5
     # via -r requirements.in
 tenacity==8.1.0
