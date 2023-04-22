@@ -11,7 +11,7 @@ import statsmodels.api as sm
 from scipy import stats
 from scipy.stats import pearsonr
 from sklearn.model_selection import train_test_split
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 
 # assuming that data is a pandas df, and response is a string
@@ -362,65 +362,6 @@ def cat_cat_table(data, predictor_list):
     return tschuprow_sorted, cramer_sorted
 
 
-def cat_cat_heatmap(data, predictor_list):
-
-    tschuprow_sorted, cramer_sorted = cat_cat_table(data, predictor_list)
-
-    tschuprow_heatmap = go.Figure(
-        data=go.Heatmap(
-            z=tschuprow_sorted["tschuprow"],
-            x=tschuprow_sorted["cat_2"],
-            y=tschuprow_sorted["cat_1"],
-            colorscale="RdBu",
-            colorbar=dict(title="Tschuprow's T"),
-        )
-    )
-
-    for i, row in enumerate(tschuprow_heatmap.data[0].z):
-        for j, val in enumerate(row):
-            tschuprow_heatmap.add_annotation(
-                text="{:.2f}".format(val),
-                x=tschuprow_sorted["cat_2"][j],
-                y=tschuprow_sorted["cat_1"][i],
-                font=dict(color="black"),
-                showarrow=False,
-            )
-
-    tschuprow_heatmap.update_layout(
-        title="Tschuprow's Correlation Matrix",
-        xaxis_title="Cat 2",
-        yaxis_title="Cat 1",
-    )
-
-    cramer_heatmap = go.Figure(
-        data=go.Heatmap(
-            z=cramer_sorted["cramer"],
-            x=cramer_sorted["cat_2"],
-            y=cramer_sorted["cat_1"],
-            colorscale="RdBu",
-            colorbar=dict(title="Cramer's V"),
-        )
-    )
-
-    for i, row in enumerate(cramer_heatmap.data[0].z):
-        for j, val in enumerate(row):
-            cramer_heatmap.add_annotation(
-                text="{:.2f}".format(val),
-                x=cramer_sorted["cat_2"][j],
-                y=cramer_sorted["cat_1"][i],
-                font=dict(color="black"),
-                showarrow=False,
-            )
-
-    cramer_heatmap.update_layout(
-        title="Cramer's  Correlation Matrix",
-        xaxis_title="Cat 2",
-        yaxis_title="Cat 1",
-    )
-
-    return tschuprow_heatmap, cramer_heatmap
-
-
 def to_html(data, predictor_list):
     html = ""
     pearsonr_result, pearsonr_fig = pearsonr_table(data, predictor_list)
@@ -428,12 +369,6 @@ def to_html(data, predictor_list):
 
     cat_corr_result, cat_corr_fig = cat_correlation_table(data, predictor_list)
     html += cat_corr_result.to_html() + cat_corr_fig.to_html()
-
-    tschuprow_result, cramer_result = cat_cat_table(data, predictor_list)
-    html += tschuprow_result.to_html() + cramer_result.to_html()
-
-    tschuprow_fig, cramer_fig = cat_cat_heatmap(data, predictor_list)
-    html += tschuprow_fig.to_html() + cramer_fig.to_html()
 
     with open("midterm_report.html", "w") as f:
         f.write(html)
@@ -449,10 +384,15 @@ def main():
     database = "baseball"
 
     engine = create_engine(
-        f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}"
+        f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}",
+        future=True,
     )
 
-    df = pd.read_sql_table("features", engine)
+    # sqlalchemy 2.0 rewrite
+    with engine.begin() as connection:
+        features = connection.execute(text("SELECT * FROM features"))
+
+    df = pd.DataFrame(features)
     df = df.fillna(0)
     response = "winner_home_or_away"
     print(df[response].unique())
@@ -474,6 +414,13 @@ def main():
     df["home_team_win"] = df["winner_home_or_away"].apply(
         lambda x: 1 if x == "H" else 0
     )
+    print(df.dtypes)
+
+    # something breaks in the switch from sqlalchemy 1.4 to sqlalchemy 2.0 that takes
+    # obp and h_9 as object and not floats
+    df["obp"] = df["obp"].astype(float)
+    df["h_9"] = df["h_9"].astype(float)
+    print(df.dtypes)
     # trouble reconciling response dtype object with mean of response and random forest
     # model restricted to logistic regression
     # looking at t vals, obp, bb/9, pa/so, h/9, k/9 have strongest relationships predicting home team win
@@ -494,7 +441,7 @@ def main():
     # we have a subset of predictors that are still significant, but not as strongly correlated
     # as the strong predictors from the t-values
     # interestingly, created features k/pitchload (measuring load on a pitcher) and k/rest (measuring
-    # how rested a pitcher is are still predictive
+    # how rested a pitcher is) are still predictive
     weak_predictors = ["hr_h", "go_ao", "k_pitch_load", "k_rest"]
     X = df[weak_predictors]
     Y = df["home_team_win"]
