@@ -1,4 +1,5 @@
 numpy
+mysql-connector-python
 pyspark
 pyspark-stubs
 pandas
@@ -6,3 +7,4 @@ plotly
 scikit-learn
 statsmodels
 scipy
+sqlalchemy==1.4.*
