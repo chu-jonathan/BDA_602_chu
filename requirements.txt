@@ -53,7 +53,7 @@ six==1.16.0
     # via
     #   patsy
     #   python-dateutil
-sqlalchemy==1.4.47
+sqlalchemy==2.0.0
     # via -r requirements.in
 statsmodels==0.13.5
     # via -r requirements.in
@@ -61,3 +61,5 @@ tenacity==8.1.0
     # via plotly
 threadpoolctl==3.1.0
     # via scikit-learn
+typing-extensions==4.5.0
+    # via sqlalchemy

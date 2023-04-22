@@ -7,4 +7,4 @@ plotly
 scikit-learn
 statsmodels
 scipy
-sqlalchemy==1.4.*
+sqlalchemy
