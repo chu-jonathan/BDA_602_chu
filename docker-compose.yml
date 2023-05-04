@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: sql.dockerfile
+    volumes:
+      - baseball-db-data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: model.dockerfile
+    environment:
+      MYSQL_USER: jchu
+      MYSQL_PASSWORD: bda #pragma: allowlist secret
+      MYSQL_HOST: db
+      MYSQL_DB: baseball
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+volumes:
+  baseball-db-data:
