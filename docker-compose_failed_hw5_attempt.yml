@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  mariadb:
+    build:
+      context: .
+      dockerfile: Dockerfile.mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD=bda
+      MYSQL_DATABASE=baseball
+      MYSQL_USER=jchu
+      MYSQL_PASSWORD=bda
+
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    depends_on:
+      - mariadb
+    environment:
+      - DATABASE_URL=mariadb://jchu:bda@mariadb:3306/baseball
+
+volumes:
+  db_data:

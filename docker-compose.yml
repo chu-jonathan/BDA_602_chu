@@ -1,26 +1,15 @@
-version: "3.8"
+version: '3'
 
 services:
-  db:
+  mariadb:
     build:
       context: .
-      dockerfile: sql.dockerfile
-    volumes:
-      - baseball-db-data:/var/lib/mysql
-
-  app:
-    build:
-      context: .
-      dockerfile: model.dockerfile
+      dockerfile: Dockerfile.mariadb
+    restart: always
     environment:
+      MYSQL_ROOT_PASSWORD: bda
+      MYSQL_DATABASE: baseball
       MYSQL_USER: jchu
-      MYSQL_PASSWORD: bda #pragma: allowlist secret
-      MYSQL_HOST: db
-      MYSQL_DB: baseball
-    volumes:
-      - .:/app
-    depends_on:
-      - db
-
-volumes:
-  baseball-db-data:
+      MYSQL_PASSWORD: bda
+    ports:
+      - '3306:3306'

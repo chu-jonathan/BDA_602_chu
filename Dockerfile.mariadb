@@ -1,0 +1,17 @@
+FROM mariadb:latest
+
+ENV MYSQL_ROOT_PASSWORD=bda
+ENV MYSQL_DATABASE=baseball
+ENV MYSQL_USER=jchu
+ENV MYSQL_PASSWORD=bda
+
+#initialized db with baseball.sql, removed because baseball.sql too large to commit 
+#COPY baseball.sql /docker-entrypoint-initdb.d/
+
+COPY hw_02.sql /docker-entrypoint-initdb.d/
+
+#RUN /usr/bin/mysqld_safe --skip-grant-tables & \
+#    && sleep 5 \
+#    && mysql -uroot -e "CREATE USER 'jchu'@'%' IDENTIFIED BY 'bda';" \
+#    && mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'jchu'@'%';" \
+#    && mysql -uroot -e "FLUSH PRIVILEGES;"
