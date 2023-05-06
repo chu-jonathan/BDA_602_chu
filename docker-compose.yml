@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mariadb:
+    build:
+      context: .
+      dockerfile: Dockerfile.mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: bda
+      MYSQL_DATABASE: baseball
+      MYSQL_USER: jchu
+      MYSQL_PASSWORD: bda
+    ports:
+      - '3306:3306'
