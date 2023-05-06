@@ -1,0 +1,2 @@
+FROM mariadb
+COPY ./hw_05_features.sql /docker-entrypoint-initdb.d/

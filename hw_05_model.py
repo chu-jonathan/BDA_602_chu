@@ -379,7 +379,7 @@ def main():
 
     user = "jchu"
     password = "bda"  # pragma: allowlist secret
-    host = "localhost"
+    host = "mariadb"
     port = "3306"
     database = "baseball"
 
