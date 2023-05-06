@@ -5,8 +5,10 @@ ENV MYSQL_DATABASE=baseball
 ENV MYSQL_USER=jchu
 ENV MYSQL_PASSWORD=bda
 
-COPY baseball.sql /docker-entrypoint-initdb.d/
-COPY hw_05_features.sql /docker-entrypoint-initdb.d/
+#initialized db with baseball.sql, removed because baseball.sql too large to commit 
+#COPY baseball.sql /docker-entrypoint-initdb.d/
+
+COPY hw_02.sql /docker-entrypoint-initdb.d/
 
 #RUN /usr/bin/mysqld_safe --skip-grant-tables & \
 #    && sleep 5 \
