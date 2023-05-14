@@ -22,9 +22,8 @@ def main():
     with engine.begin() as connection:
         features = connection.execute(
             text(
-                "SELECT streak, win_lose, first_home_line, k_9, go_ao, bb_9, "
-                "k_pitch_load, k_rest, month_column, days_since_last_game"
-                "FROM pitching_stats"
+                "SELECT streak, win_lose, first_home_line, k_9, go_ao, bb_9,k_pitch_load,"
+                "k_rest, month_column, days_since_last_game FROM pitching_stats"
             )
         )
 
