@@ -1,0 +1,10 @@
+#couldn't get connection to mariadb, so exported table into .pq and mounted it as volume
+
+version: "3"
+services:
+  final:
+    build:
+      context: .
+    volumes:
+      - ./export.parquet:/app/export.parquet
+      - ./plots:/app/plots

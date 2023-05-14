@@ -1,7 +1,6 @@
 numpy
 mysql-connector-python
-pyspark
-pyspark-stubs
+pyarrow
 pandas
 plotly
 scikit-learn
