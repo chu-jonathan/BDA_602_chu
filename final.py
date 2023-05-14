@@ -9,8 +9,9 @@ import plotly.offline as pyo
 import pyarrow.parquet as pq
 import statsmodels.api as sm
 from sklearn.ensemble import RandomForestClassifier
-
-# from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 
 
 def predictor_dtype(data, predictor_list):
@@ -132,6 +133,19 @@ def main():
     print(logistic(df, response, predictor))
     print(mean_of_response(df, response, predictor))
     print(random_forest(df, response, predictor))
+
+    remaining = ["go_ao", "bb_9", "month_column", "days_since_last_game"]
+    remain = df[remaining]
+    X = remain[remaining]
+    Y = df[response]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, Y, test_size=0.3, random_state=3
+    )
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print("Accuracy:", accuracy)
 
 
 if __name__ == "__main__":
